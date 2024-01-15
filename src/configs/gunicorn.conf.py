@@ -1,7 +1,7 @@
 from multiprocessing import cpu_count
 from os import environ
 
-from settings import app_settings
+from core.config import app_settings
 
 
 bind = '0.0.0.0:' + str(app_settings.API_PORT)

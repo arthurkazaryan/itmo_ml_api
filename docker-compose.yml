@@ -3,7 +3,7 @@ version: '3.7'
 services:
   api-itmo:
     build:
-      context: api
+      context: src
       dockerfile: Dockerfile
     image: api_itmo
     restart: always
@@ -12,7 +12,6 @@ services:
     ports:
       - "${API_PORT}:${API_PORT}"
     volumes:
-      - ./api:/api
-    working_dir: /api
-    command: >
-      sh -c "gunicorn -c configs/gunicorn.conf.py start:app"
+      - ./src:/src
+    working_dir: /src
+    command: gunicorn -c configs/gunicorn.conf.py start:app
