@@ -1,3 +1,4 @@
+import json
 from contextlib import AbstractContextManager, contextmanager
 from typing import Callable
 
@@ -5,6 +6,7 @@ from sqlalchemy import create_engine, orm
 from sqlalchemy.orm import Session
 
 from model.user import User, UserBalance
+from model.predictors import Models
 
 
 class Database:
@@ -21,6 +23,13 @@ class Database:
     def create_database(self) -> None:
         User.metadata.create_all(self._engine)
         UserBalance.metadata.create_all(self._engine)
+        Models.metadata.create_all(self._engine)
+
+        with open("model/fixtures/models.json") as f:
+            with self.session() as s:
+                for item in json.load(f):
+                    s.merge(Models(**item))
+                s.commit()
 
     @contextmanager
     def session(self) -> Callable[..., AbstractContextManager[Session]]:

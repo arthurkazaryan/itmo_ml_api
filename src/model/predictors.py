@@ -1,9 +1,9 @@
-from sqlmodel import Field, Text
+from sqlalchemy import Column, Integer, BigInteger, Float, String, DateTime, ForeignKey, Enum, UniqueConstraint, Boolean
 
-from model.base_model import BaseModel
+from model.base_model import BaseModelTime
 
 
-class Models(BaseModel, table=True):
-    name: str = Field(unique=True)
-    cost: int = Field()
-    is_active: bool = Field(default=True)
+class Models(BaseModelTime):
+    __tablename__ = "models"
+    name = Column(String(32), nullable=False)
+    price = Column(Integer, nullable=False)
