@@ -48,7 +48,7 @@ def preprocess_input(n_days: int, drug: str, age: int, sex: str, ascites: str, h
 
 
 s_age, s_albumin, s_alk_phos, s_bilirubin, s_cholesterol, \
-    s_copper, s_n_days, s_platelets, s_prothrombin, s_sgot, s_tryglicerides = load_scalers(Path("model/scaler"))
+    s_copper, s_n_days, s_platelets, s_prothrombin, s_sgot, s_tryglicerides = load_scalers(Path("celery_app/dump/scaler"))
 
-l_ascites, l_drug, l_edema, l_hepatomegaly, l_sex, l_spiders = load_label_encoders(Path("model/l_encoder"))
+l_ascites, l_drug, l_edema, l_hepatomegaly, l_sex, l_spiders = load_label_encoders(Path("celery_app/dump/l_encoder"))
 

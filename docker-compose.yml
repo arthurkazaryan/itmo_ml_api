@@ -18,17 +18,34 @@ services:
     command: gunicorn -c configs/gunicorn.conf.py start:app
   worker-model-1:
     build:
-        context: model
+        context: celery_app
         dockerfile: Dockerfile
+    env_file:
+      - .env
     image: model_itmo
     restart: always
-    ports:
-      - "${REDIS_PORT}:${REDIS_PORT}"
+    environment:
+      - MODEL_NAME=model_1
+    depends_on:
+      - redis-api-itmo
     volumes:
       - ./celery_app:/celery_app
-      - ./model:/celery_app/model
-    working_dir: /src
     command: celery -A celery_app.worker worker -Q model_1 -l info -n model_1
+  worker-model-2:
+    build:
+      context: celery_app
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    image: model_itmo
+    restart: always
+    environment:
+      - MODEL_NAME=model_2
+    depends_on:
+      - redis-api-itmo
+    volumes:
+      - ./celery_app:/celery_app
+    command: celery -A celery_app.worker worker -Q model_2 -l info -n model_2
   redis-api-itmo:
     image: redis:alpine
     restart: always

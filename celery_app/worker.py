@@ -10,11 +10,14 @@ from dotenv import load_dotenv
 load_dotenv()
 
 REDIS_URL = os.getenv("REDIS_URL")
+MODEL_NAME = os.getenv("MODEL_NAME")
+tasks = {"include": [f"celery_app.{MODEL_NAME}"]} if MODEL_NAME else {}
 
 app = Celery(
     'itmo_api',
     broker=REDIS_URL,
     backend=REDIS_URL,
+    **tasks
 )
 
 app.conf.timezone = "Europe/Paris"
