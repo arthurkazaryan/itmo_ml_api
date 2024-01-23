@@ -13,5 +13,40 @@ services:
       - "${API_PORT}:${API_PORT}"
     volumes:
       - ./src:/src
+      - ./celery_app:/src/celery_app
     working_dir: /src
     command: gunicorn -c configs/gunicorn.conf.py start:app
+  worker-model-1:
+    build:
+        context: model
+        dockerfile: Dockerfile
+    image: model_itmo
+    restart: always
+    ports:
+      - "${REDIS_PORT}:${REDIS_PORT}"
+    volumes:
+      - ./celery_app:/celery_app
+      - ./model:/celery_app/model
+    working_dir: /src
+    command: celery -A celery_app.worker worker -Q model_1 -l info -n model_1
+  redis-api-itmo:
+    image: redis:alpine
+    restart: always
+    ports:
+      - "${REDIS_PORT}:${REDIS_PORT}"
+    volumes:
+      - ./redis:/data
+    command: --port ${REDIS_PORT} --save 60 1 --loglevel warning --appendonly no
+  flower-api-itmo:
+    build:
+      context: src
+      dockerfile: Dockerfile
+    image: api_itmo
+    restart: always
+    env_file:
+      - .env
+    volumes:
+      - ./celery_app/:/celery_app
+    command: celery -A celery_app.worker flower --port=${FLOWER_PORT}
+    ports:
+      - "${FLOWER_PORT}:${FLOWER_PORT}"
