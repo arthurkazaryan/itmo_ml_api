@@ -18,8 +18,7 @@ class AuthService(BaseService):
         super().__init__(user_repository)
 
     def sign_in(self, sign_in_info: SignIn):
-        print(sign_in_info)
-        find_user = FindUser(**sign_in_info.model_dump())
+        find_user = FindUser(**sign_in_info.model_dump(exclude_none=True))
         find_user.email__eq = sign_in_info.email__eq
         user: List[User] = self.user_repository.read_by_options(find_user)["founds"]
         if len(user) < 1:

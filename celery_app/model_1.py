@@ -12,37 +12,31 @@ celery_log = get_task_logger(__name__)
 model = pickle.load(open(Path("celery_app/dump/model_1/log_reg.mdl"), 'rb'))
 
 
-@app.task(name='log_reg', bind=True)
-def log_reg(self, user_id: int, n_days: int, drug: str, age: int, sex: str, ascites: str, hepatomegaly: str,
+@app.task(name='model_1')
+def model_1(user_id: int, n_days: int, drug: str, age: int, sex: str, ascites: str, hepatomegaly: str,
             spiders: str, edema: str, bilirubin: float, cholesterol: float, albumin: float, copper: float,
             alk_phos: float, sgot: float, tryglicerides: float, platelets: float, prothrombin: float, stage: float):
 
     celery_log.info(f'Task started. User: {user_id}')
-    # task_id = self.request.id
     array = preprocess_input(n_days, drug, age, sex, ascites, hepatomegaly,
             spiders, edema, bilirubin, cholesterol, albumin, copper,
             alk_phos, sgot, tryglicerides, platelets, prothrombin, stage)
-
     result = model.predict(array)[0]
 
-    return user_id, result
+    return user_id, int(result)
 
 
-@task_success.connect(sender=log_reg)
+@task_success.connect(sender=model_1)
 def reduce_limit(sender=None, **kwargs):
-    user_id, *_ = kwargs['result']
     pass
 
 
-@task_success.connect(sender=log_reg)
+@task_success.connect(sender=model_1)
 def change_status_success(sender=None, **kwargs):
-    user_id, *_ = kwargs['result']
-    sender.request.id
+    user_id, class_id = kwargs['result']
     pass
 
 
-@task_failure.connect(sender=log_reg)
+@task_failure.connect(sender=model_1)
 def change_status_failure(sender=None, **kwargs):
-    user_id, *_ = kwargs['result']
-    sender.request.id
     pass

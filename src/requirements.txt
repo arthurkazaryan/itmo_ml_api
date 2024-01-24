@@ -5,10 +5,10 @@ python-jose==3.3.0
 passlib==1.7.4
 pydantic~=2.4.2
 pydantic-settings~=2.0.3
-SQLAlchemy~=1.4.26
+SQLAlchemy==1.4.36
+sqlalchemy2-stubs==0.0.2a27
 aiosqlite~=0.19.0
 dependency-injector==4.39.1
-databases==0.8.0
 
 celery~=5.2.7
 flower==1.2.0

@@ -10,6 +10,7 @@ class Container(containers.DeclarativeContainer):
     wiring_config = containers.WiringConfiguration(
         modules=[
             "api.v1.endpoints.auth",
+            "api.v1.endpoints.model",
             "core.dependencies",
         ]
     )
@@ -19,7 +20,10 @@ class Container(containers.DeclarativeContainer):
     db = providers.Singleton(Database, db_url=str(configs.DATABASE_URL))
 
     user_repository = providers.Factory(UserRepository, session_factory=db.provided.session)
+    model_repository = providers.Factory(ModelRepository, session_factory=db.provided.session)
 
     user_service = providers.Factory(UserService, user_repository=user_repository)
 
     auth_service = providers.Factory(AuthService, user_repository=user_repository)
+
+    model_service = providers.Factory(ModelService, model_repository=model_repository)

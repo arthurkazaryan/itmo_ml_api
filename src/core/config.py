@@ -15,6 +15,10 @@ class AppSettings(BaseSettings):
     SECRET_KEY: str
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 30
 
+    PAGE: int = 1
+    PAGE_SIZE: int = 20
+    ORDERING: str = "-id"
+
     # date
     DATETIME_FORMAT: str = "%Y-%m-%dT%H:%M:%S"
     DATE_FORMAT: str = "%Y-%m-%d"

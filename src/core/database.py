@@ -5,8 +5,8 @@ from typing import Callable
 from sqlalchemy import create_engine, orm
 from sqlalchemy.orm import Session
 
-from model.user import User, UserBalance
-from model.predictors import Models
+from model.user import User
+from model.predictors import Models, Inference
 
 
 class Database:
@@ -22,8 +22,8 @@ class Database:
 
     def create_database(self) -> None:
         User.metadata.create_all(self._engine)
-        UserBalance.metadata.create_all(self._engine)
         Models.metadata.create_all(self._engine)
+        Inference.metadata.create_all(self._engine)
 
         with open("model/fixtures/models.json") as f:
             with self.session() as s:

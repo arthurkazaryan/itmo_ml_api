@@ -1,5 +1,3 @@
-from contextlib import asynccontextmanager
-
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -7,12 +5,6 @@ from api.v1.routes import routers as router_v1
 from core.container import Container
 from util.class_object import singleton
 from core.config import app_settings as configs
-# @asynccontextmanager
-# async def lifespan(application: FastAPI):
-    # if db:
-    #     await db.connect()
-    #     yield
-    #     await db.disconnect()
 
 
 @singleton

@@ -11,9 +11,9 @@ class ModelBaseInfo(BaseModel):
 
 
 class FindBase(BaseModel):
-    ordering: Optional[str] = None
-    page: Optional[int] = None
-    page_size: Optional[Union[int, str]] = None
+    ordering: str = None
+    page: int = None
+    page_size: Union[int, str] = None
 
 
 class SearchOptions(FindBase):
